@@ -5,96 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔐 Netrinix Cyber Lab</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        :root {
-            --hacker-green: #00ff41;
-            --matrix-green: #008f11;
-            --dark-bg: #0a0a0a;
-            --critical-red: #ff0033;
-        }
-        body {
-            background-color: var(--dark-bg);
-            color: var(--hacker-green);
-            font-family: 'Courier New', monospace;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        /* Matrix Rain */
-        #matrix {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.2;
-        }
-        /* Header */
-        header {
-            padding: 20px;
-            border-bottom: 1px solid var(--matrix-green);
-            text-align: center;
-        }
-        h1 {
-            text-shadow: 0 0 5px var(--hacker-green);
-            animation: pulse 2s infinite;
-        }
-        /* Vulnerabilities */
-        .vulnerability {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--matrix-green);
-            margin: 20px;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        .vulnerability h2 {
-            color: var(--critical-red);
-        }
-        /* Input Styling */
-        input, button {
-            font-family: 'Courier New', monospace;
-        }
-        input {
-            background: #111;
-            color: var(--hacker-green);
-            border: 1px solid var(--matrix-green);
-            padding: 10px;
-            margin: 5px 0;
-        }
-        button {
-            background: #008f11;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            margin: 5px 0;
-        }
-        button:hover {
-            background: #00ff41;
-        }
-        /* Admin Panel */
-        #adminPanel {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--dark-bg);
-            padding: 20px;
-            border: 2px solid var(--critical-red);
-            z-index: 100;
-        }
-        /* Animations */
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-    </style>
 </head>
 <body>
- <!-- Beta Version Alert (Will show on page load) -->
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix"></canvas>
+
+    <!-- Beta Version Alert (Will show on page load) -->
     <div id="betaAlert" class="alert-modal">
         <div class="alert-content">
             <h3>⚠️ DEVELOPMENT NOTICE</h3>
@@ -123,55 +39,40 @@
         </div>
     </div>
 
-   
-    <!-- Matrix Rain -->
-    <canvas id="matrix"></canvas>
-
-    <!-- Header -->
+    <!-- Main Content -->
     <header>
         <h1>💻 NETRINIX CYBERSECURITY LAB</h1>
-        <p>Find and exploit vulnerabilities in a safe environment</p>
+        <p>Find and exploit 15 vulnerabilities</p>
+        <button onclick="openAdminPanel()" class="admin-btn">Admin Panel</button>
     </header>
 
-    <!-- Vulnerability 1: SQL Injection -->
-    <div class="vulnerability">
-        <h2>🔎 1. SQL Injection (User Search)</h2>
-        <p>Extract all users from the database.</p>
-        <input type="text" id="searchInput" placeholder="Enter username">
-        <button onclick="searchUsers()">Search</button>
-        <div id="searchResults"></div>
-        <p><strong>💡 Hint:</strong> Try <code>' OR '1'='1</code></p>
-    </div>
+    <!-- Vulnerability Sections -->
+    <div class="container">
+        <!-- Vulnerability 1: SQLi -->
+        <div class="vulnerability">
+            <h2>🔎 1. SQL Injection</h2>
+            <input type="text" id="searchInput" placeholder="Search users...">
+            <button onclick="searchUsers()">Search</button>
+            <div id="searchResults"></div>
+            <p class="hint">💡 Try: <code>' OR '1'='1</code></p>
+        </div>
 
-    <!-- Vulnerability 2: XSS -->
-    <div class="vulnerability">
-        <h2>📝 2. XSS (Comment Section)</h2>
-        <p>Inject a script that steals cookies.</p>
-        <input type="text" id="commentInput" placeholder="Leave a comment">
-        <button onclick="postComment()">Post</button>
-        <div id="commentList"></div>
-        <p><strong>💡 Hint:</strong> Try <code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code></p>
-    </div>
-
-    <!-- Vulnerability 3: Admin Panel (CSRF) -->
+        <!-- Vulnerability 2: XSS -->
+        <div class="vulnerability">
+            <h2>📝 2. XSS Attack</h2>
+            <input type="text" id="commentInput" placeholder="Post a comment...">
+            <button onclick="postComment()">Post</button>
+            <div id="commentList"></div>
+            <p class="hint">💡 Try: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
+        </div>
+         <!-- Vulnerability 3: Admin Panel (CSRF) -->
     <div class="vulnerability">
         <h2>👑 3. Admin Panel (CSRF)</h2>
         <p>Change the admin password without proper authentication.</p>
         <button onclick="openAdminPanel()">Access Admin Panel</button>
         <p><strong>💡 Hint:</strong> Craft a fake form that submits to the admin panel.</p>
     </div>
-
-    <!-- Admin Panel (Hidden) -->
-    <div id="adminPanel">
-        <h2>🔐 ADMIN PANEL</h2>
-        <p>Change Administrator Password:</p>
-        <form id="adminForm" onsubmit="changePassword(); return false;">
-            <input type="password" id="newPassword" placeholder="New Password">
-            <button type="submit">Update Password</button>
-        </form>
-        <button onclick="closeAdminPanel()">Close</button>
-    </div>
-  <!-- Vulnerability 4: IDOR -->
+        <!-- Vulnerability 4: IDOR -->
 <div class="vulnerability">
     <h2>🆔 4. IDOR (Profile Access)</h2>
     <p>Access other users' profiles by changing the ID.</p>
@@ -187,60 +88,9 @@
     <p><strong>💡 Hint:</strong> Change the URL parameter.</p>
 </div>
 
-    <!-- More vulnerabilities can be added here -->
+        <!-- More vulnerabilities added below -->
+    </div>
 
-    <script>
-        // Matrix Rain Animation
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        const drops = Array(Math.floor(canvas.width / 20)).fill(1);
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0F0";
-            drops.forEach((y, i) => {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * 20, y * 20);
-                if (y * 20 > canvas.height || Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
-        }
-        setInterval(drawMatrix, 50);
-
-        // Vulnerability 1: SQL Injection
-        function searchUsers() {
-            const input = document.getElementById('searchInput').value;
-            const results = document.getElementById('searchResults');
-            if (input.includes("' OR '1'='1")) {
-                results.innerHTML = "<p>💉 SQL Injection Successful!<br>Users: admin, user1, user2</p>";
-            } else {
-                results.innerHTML = "<p>No users found.</p>";
-            }
-        }
-
-        // Vulnerability 2: XSS
-        function postComment() {
-            const comment = document.getElementById('commentInput').value;
-            const commentList = document.getElementById('commentList');
-            commentList.innerHTML += `<div>${comment}</div>`;
-        }
-
-        // Vulnerability 3: Admin Panel (CSRF)
-        function openAdminPanel() {
-            document.getElementById('adminPanel').style.display = 'block';
-        }
-        function closeAdminPanel() {
-            document.getElementById('adminPanel').style.display = 'none';
-        }
-        function changePassword() {
-            const newPass = document.getElementById('newPassword').value;
-            alert(`Password changed to: ${newPass} (CSRF Successful!)`);
-            closeAdminPanel();
-        }
-    </script>
-   <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
